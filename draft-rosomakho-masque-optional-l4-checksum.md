@@ -9,7 +9,7 @@ number:
 date:
 consensus: true
 v: 3
-area: AREA
+area: ""
 workgroup: "Multiplexed Application Substrate over QUIC Encryption"
 keyword:
  - checksum
@@ -17,7 +17,7 @@ keyword:
  - connect-ip
 venue:
   group: "Multiplexed Application Substrate over QUIC Encryption"
-  type: Working Group
+  type: ""
   mail: "masque@ietf.org"
   arch: "https://mailarchive.ietf.org/arch/browse/masque/"
   github: "yaroslavros/masque-optional-l4-checksum"
