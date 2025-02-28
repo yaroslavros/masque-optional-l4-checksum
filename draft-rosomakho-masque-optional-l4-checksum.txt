@@ -13,7 +13,11 @@ Expires: 1 September 2025
 
 Abstract
 
-   TODO Abstract
+   This document specifies an extension to IP over HTTP, allowing
+   communicating parties to negotiate the omission of TCP and UDP
+   checksum computations in tunneled packets.  It provides a mechanism
+   for agreement on this capability and assigns Context Identifiers to
+   mark packets where checksum computation is intentionally bypassed.
 
 About This Document
 
@@ -26,7 +30,7 @@ About This Document
    rosomakho-masque-optional-l4-checksum/.
 
    Discussion of this document takes place on the Multiplexed
-   Application Substrate over QUIC Encryption Working Group mailing list
+   Application Substrate over QUIC Encryption mailing list
    (mailto:masque@ietf.org), which is archived at
    https://mailarchive.ietf.org/arch/browse/masque/.  Subscribe at
    https://www.ietf.org/mailman/listinfo/masque/.
@@ -69,15 +73,41 @@ Table of Contents
 
    1.  Introduction
    2.  Conventions and Definitions
-   3.  Security Considerations
-   4.  IANA Considerations
-   5.  Normative References
+   3.  Transport-Checksum-Optional header
+   4.  Using Context ID to signal checksum omission
+   5.  Security Considerations
+   6.  IANA Considerations
+     6.1.  HTTP Header
+   7.  References
+     7.1.  Normative References
+     7.2.  Informative References
    Acknowledgments
    Author's Address
 
 1.  Introduction
 
-   TODO Introduction
+   Proxying IP in HTTP [CONNECT-IP] allows IP packets to be tunneled
+   over an HTTP connection.  TCP [TCP] and UDP [UDP] packets
+   encapsulated in this mechanism are expected to include correct
+   internet checksums [CSUM] in corresponding transport layer header.
+   This checksum is designed to reduce chances of packet corruption in
+   transit.
+
+   A CONNECT-IP endpoint accepting IP packets for HTTP transit may
+   obtain them without pre-calculated checksums.  This can be beneficial
+   in scenarios where segmentation offloading is used or when packets
+   are generated directly by the tunneling endpoint, reducing redundant
+   computational overhead.  Similarly, the receiver of IP packets
+   encapsulated in HTTP may need to remove TCP and UDP headers from some
+   packets during segmentation offloading.  Additionally, if the packets
+   are processed locally, the receiver may ignore the checksums since
+   HTTP provides reliable transport, making the embedded checksumming
+   mechanism redundant.
+
+   To signal support of checksum omission, endpoints include "Transport-
+   Checksum-Optional" header field, as defined in Section 3.  The value
+   of the header corresponds to the Context Identifier for the datagrams
+   with potentially incorrect TCP or UDP checksums.
 
 2.  Conventions and Definitions
 
@@ -87,15 +117,84 @@ Table of Contents
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
-3.  Security Considerations
+3.  Transport-Checksum-Optional header
 
-   TODO Security
+   A client initiating IP proxying via a CONNECT request as defined in
+   [CONNECT-IP] includes the "Transport-Checksum-Optional" header to
+   indicate that it supports transport checksum omission and would like
+   to negotiate it.  The value of the header will be set to non-zero
+   even-numbered Context Identifier as defined in Section 4 of
+   [CONNECT-UDP].  If the server includes the "Transport-Checksum-
+   Optional" header in the response and sets it to an odd-numbered value
+   as long as it also supports transport checksum omission mechanism and
+   would like to use it.
 
-4.  IANA Considerations
+   Server MUST NOT include "Transport-Checksum-Optional" header in
+   response to request that did not include this header.  Client
+   receiving unexpected "Transport-Checksum-Optional" header in server
+   response MUST treat the proxying attempt as failed and abort the
+   connection.
 
-   This document has no IANA actions.
+4.  Using Context ID to signal checksum omission
 
-5.  Normative References
+   To indicate TCP and UDP checksum omission the endpoints use datagram
+   Context Identifier that they previously provided to the peer through
+   the "Transport-Checksum-Optional" header.  TCP and UDP packets
+   encapsulated into datagrams with that Context Identifier SHOULD have
+   checksum set to all zero.  If the receiver of the datagram needs to
+   route that packet without removing transport layer header for
+   segmentation offloading purposes, it MUST calculate the checksum and
+   populate the field accordingly.
+
+   Datagrams containing TCP and UDP packets with known correct checksums
+   MUST NOT use Context Identifier signaled in the "Transport-Checksum-
+   Optional" header.
+
+   This mechanism is designed only for TCP and UDP checksums.  Checksums
+   of other transport layer protocols or IPv4 header MUST NOT be
+   omitted.
+
+5.  Security Considerations
+
+   Since HTTP transport provides integrity protection, checksum omission
+   does not introduce additional security risks.
+
+6.  IANA Considerations
+
+6.1.  HTTP Header
+
+   This document registers the "Transport-Checksum-Optional" header in
+   the "Hypertext Transfer Protocol (HTTP) Field Name Registry"
+   <https://www.iana.org/assignments/http-fields>.
+
+   +===========================+=========+==========+=========+========+
+   |Field Name                 |Status   |Structured|Reference|Comments|
+   |                           |         |Type      |         |        |
+   +===========================+=========+==========+=========+========+
+   |Transport-Checksum-Optional|permanent|Item      |This     |None    |
+   |                           |         |          |Document |        |
+   +---------------------------+---------+----------+---------+--------+
+
+                                  Table 1
+
+7.  References
+
+7.1.  Normative References
+
+   [CONNECT-IP]
+              Pauly, T., Ed., Schinazi, D., Chernyakhovsky, A.,
+              Kühlewind, M., and M. Westerlund, "Proxying IP in HTTP",
+              RFC 9484, DOI 10.17487/RFC9484, October 2023,
+              <https://www.rfc-editor.org/rfc/rfc9484>.
+
+   [CONNECT-UDP]
+              Schinazi, D., "Proxying UDP in HTTP", RFC 9298,
+              DOI 10.17487/RFC9298, August 2022,
+              <https://www.rfc-editor.org/rfc/rfc9298>.
+
+   [CSUM]     Braden, R., Borman, D., and C. Partridge, "Computing the
+              Internet checksum", RFC 1071, DOI 10.17487/RFC1071,
+              September 1988, <https://www.rfc-editor.org/rfc/rfc1071>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -105,6 +204,20 @@ Table of Contents
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [TCP]      Eddy, W., Ed., "Transmission Control Protocol (TCP)",
+              STD 7, RFC 9293, DOI 10.17487/RFC9293, August 2022,
+              <https://www.rfc-editor.org/rfc/rfc9293>.
+
+   [UDP]      Postel, J., "User Datagram Protocol", STD 6, RFC 768,
+              DOI 10.17487/RFC0768, August 1980,
+              <https://www.rfc-editor.org/rfc/rfc768>.
+
+7.2.  Informative References
+
+   [OFFLOADS] The Linux Kernel Documentation, "Segmentation Offloads",
+              n.d., <https://www.kernel.org/doc/html/latest/networking/
+              segmentation-offloads.html>.
 
 Acknowledgments
 

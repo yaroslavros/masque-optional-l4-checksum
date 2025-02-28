@@ -7,7 +7,7 @@
 <title>Optional TCP and UDP checksums for IP in HTTP</title>
 <meta content="Yaroslav Rosomakho" name="author">
 <meta content="
-       TODO Abstract 
+       This document specifies an extension to IP over HTTP, allowing communicating parties to negotiate the omission of TCP and UDP checksum computations in tunneled packets. It provides a mechanism for agreement on this capability and assigns Context Identifiers to mark packets where checksum computation is intentionally bypassed. 
     " name="description">
 <meta content="xml2rfc 3.27.0" name="generator">
 <meta content="checksum" name="keyword">
@@ -1081,7 +1081,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Optional TCP and UDP checksums for IP in HTTP</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">TODO Abstract<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document specifies an extension to IP over HTTP, allowing communicating parties to negotiate the omission of TCP and UDP checksum computations in tunneled packets. It provides a mechanism for agreement on this capability and assigns Context Identifiers to mark packets where checksum computation is intentionally bypassed.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1093,7 +1093,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-rosomakho-masque-optional-l4-checksum/">https://datatracker.ietf.org/doc/draft-rosomakho-masque-optional-l4-checksum/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
 <p id="section-note.1-3">
         Discussion of this document takes place on the
-        Multiplexed Application Substrate over QUIC Encryption Working Group mailing list (<span><a href="mailto:masque@ietf.org">mailto:masque@ietf.org</a></span>),
+        Multiplexed Application Substrate over QUIC Encryption  mailing list (<span><a href="mailto:masque@ietf.org">mailto:masque@ietf.org</a></span>),
         which is archived at <span><a href="https://mailarchive.ietf.org/arch/browse/masque/">https://mailarchive.ietf.org/arch/browse/masque/</a></span>.
         Subscribe at <span><a href="https://www.ietf.org/mailman/listinfo/masque/">https://www.ietf.org/mailman/listinfo/masque/</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
 <p id="section-note.1-4">Source for this draft and an issue tracker can be found at
@@ -1154,19 +1154,38 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-transport-checksum-optional" class="internal xref">Transport-Checksum-Optional header</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-using-context-id-to-signal-" class="internal xref">Using Context ID to signal checksum omission</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-http-header" class="internal xref">HTTP Header</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
 </li>
         </ul>
 </nav>
@@ -1177,7 +1196,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">TODO Introduction<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-1">Proxying IP in HTTP <span>[<a href="#CONNECT-IP" class="cite xref">CONNECT-IP</a>]</span> allows IP packets to be tunneled over an HTTP connection. TCP <span>[<a href="#TCP" class="cite xref">TCP</a>]</span> and UDP <span>[<a href="#UDP" class="cite xref">UDP</a>]</span> packets encapsulated in this mechanism are expected to include correct internet checksums <span>[<a href="#CSUM" class="cite xref">CSUM</a>]</span> in corresponding transport layer header. This checksum is designed to reduce chances of packet corruption in transit.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">A CONNECT-IP endpoint accepting IP packets for HTTP transit may obtain them without pre-calculated checksums. This can be beneficial in scenarios where segmentation offloading is used or when packets are generated directly by the tunneling endpoint, reducing redundant computational overhead.  Similarly, the receiver of IP packets encapsulated in HTTP may need to remove TCP and UDP headers from some packets during segmentation offloading. Additionally, if the packets are processed locally, the receiver may ignore the checksums since HTTP provides reliable transport, making the embedded checksumming mechanism redundant.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">To signal support of checksum omission, endpoints include "Transport-Checksum-Optional" header field, as defined in <a href="#header" class="auto internal xref">Section 3</a>. The value of the header corresponds to the Context Identifier for the datagrams with potentially incorrect TCP or UDP checksums.<a href="#section-1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1191,37 +1212,124 @@ described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</s
 appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="security-considerations">
+<div id="header">
 <section id="section-3">
-      <h2 id="name-security-considerations">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      <h2 id="name-transport-checksum-optional">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-transport-checksum-optional" class="section-name selfRef">Transport-Checksum-Optional header</a>
       </h2>
-<p id="section-3-1">TODO Security<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-1">A client initiating IP proxying via a CONNECT request as defined in <span>[<a href="#CONNECT-IP" class="cite xref">CONNECT-IP</a>]</span> includes the "Transport-Checksum-Optional" header to indicate that it supports transport checksum omission and would like to negotiate it. The value of the header will be set to non-zero even-numbered Context Identifier as defined in <span><a href="https://rfc-editor.org/rfc/rfc9298#section-4" class="relref">Section 4</a> of [<a href="#CONNECT-UDP" class="cite xref">CONNECT-UDP</a>]</span>. If the server includes the "Transport-Checksum-Optional" header in the response and sets it to an odd-numbered value as long as it also supports transport checksum omission mechanism and would like to use it.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">Server <span class="bcp14">MUST NOT</span> include "Transport-Checksum-Optional" header in response to request that did not include this header. Client receiving unexpected "Transport-Checksum-Optional" header in server response <span class="bcp14">MUST</span> treat the proxying attempt as failed and abort the connection.<a href="#section-3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="using-context-id-to-signal-checksum-omission">
+<section id="section-4">
+      <h2 id="name-using-context-id-to-signal-">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-using-context-id-to-signal-" class="section-name selfRef">Using Context ID to signal checksum omission</a>
+      </h2>
+<p id="section-4-1">To indicate TCP and UDP checksum omission the endpoints use datagram Context Identifier that they previously provided to the peer through the "Transport-Checksum-Optional" header. TCP and UDP packets encapsulated into datagrams with that Context Identifier <span class="bcp14">SHOULD</span> have checksum set to all zero. If the receiver of the datagram needs to route that packet without removing transport layer header for segmentation offloading purposes, it <span class="bcp14">MUST</span> calculate the checksum and populate the field accordingly.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-2">Datagrams containing TCP and UDP packets with known correct checksums <span class="bcp14">MUST NOT</span> use Context Identifier signaled in the "Transport-Checksum-Optional" header.<a href="#section-4-2" class="pilcrow">¶</a></p>
+<p id="section-4-3">This mechanism is designed only for TCP and UDP checksums. Checksums of other transport layer protocols or IPv4 header <span class="bcp14">MUST NOT</span> be omitted.<a href="#section-4-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-5">
+      <h2 id="name-security-considerations">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-5-1">Since HTTP transport provides integrity protection, checksum omission does not introduce additional security risks.<a href="#section-5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-4">
+<section id="section-6">
       <h2 id="name-iana-considerations">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-4-1">This document has no IANA actions.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<div id="http-header">
+<section id="section-6.1">
+        <h3 id="name-http-header">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-http-header" class="section-name selfRef">HTTP Header</a>
+        </h3>
+<p id="section-6.1-1">This document registers the "Transport-Checksum-Optional" header in the "Hypertext Transfer Protocol (HTTP) Field Name Registry" &lt;<span><a href="https://www.iana.org/assignments/http-fields">https://www.iana.org/assignments/http-fields</a></span>&gt;.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<table class="center" id="table-1">
+          <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Field Name</th>
+              <th class="text-left" rowspan="1" colspan="1">Status</th>
+              <th class="text-left" rowspan="1" colspan="1">Structured Type</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+              <th class="text-left" rowspan="1" colspan="1">Comments</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">Transport-Checksum-Optional</td>
+              <td class="text-left" rowspan="1" colspan="1">permanent</td>
+              <td class="text-left" rowspan="1" colspan="1">Item</td>
+              <td class="text-left" rowspan="1" colspan="1">This Document</td>
+              <td class="text-left" rowspan="1" colspan="1">None</td>
+            </tr>
+          </tbody>
+        </table>
 </section>
 </div>
-<div id="sec-normative-references">
-<section id="section-5">
-      <h2 id="name-normative-references">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+</section>
+</div>
+<div id="sec-combined-references">
+<section id="section-7">
+      <h2 id="name-references">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
+<div id="sec-normative-references">
+<section id="section-7.1">
+        <h3 id="name-normative-references">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
 <dl class="references">
+<dt id="CONNECT-IP">[CONNECT-IP]</dt>
+        <dd>
+<span class="refAuthor">Pauly, T., Ed.</span>, <span class="refAuthor">Schinazi, D.</span>, <span class="refAuthor">Chernyakhovsky, A.</span>, <span class="refAuthor">Kühlewind, M.</span>, and <span class="refAuthor">M. Westerlund</span>, <span class="refTitle">"Proxying IP in HTTP"</span>, <span class="seriesInfo">RFC 9484</span>, <span class="seriesInfo">DOI 10.17487/RFC9484</span>, <time datetime="2023-10" class="refDate">October 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9484">https://www.rfc-editor.org/rfc/rfc9484</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="CONNECT-UDP">[CONNECT-UDP]</dt>
+        <dd>
+<span class="refAuthor">Schinazi, D.</span>, <span class="refTitle">"Proxying UDP in HTTP"</span>, <span class="seriesInfo">RFC 9298</span>, <span class="seriesInfo">DOI 10.17487/RFC9298</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9298">https://www.rfc-editor.org/rfc/rfc9298</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="CSUM">[CSUM]</dt>
+        <dd>
+<span class="refAuthor">Braden, R.</span>, <span class="refAuthor">Borman, D.</span>, and <span class="refAuthor">C. Partridge</span>, <span class="refTitle">"Computing the Internet checksum"</span>, <span class="seriesInfo">RFC 1071</span>, <span class="seriesInfo">DOI 10.17487/RFC1071</span>, <time datetime="1988-09" class="refDate">September 1988</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1071">https://www.rfc-editor.org/rfc/rfc1071</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
-    <dd>
+        <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="TCP">[TCP]</dt>
+        <dd>
+<span class="refAuthor">Eddy, W., Ed.</span>, <span class="refTitle">"Transmission Control Protocol (TCP)"</span>, <span class="seriesInfo">STD 7</span>, <span class="seriesInfo">RFC 9293</span>, <span class="seriesInfo">DOI 10.17487/RFC9293</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9293">https://www.rfc-editor.org/rfc/rfc9293</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="UDP">[UDP]</dt>
+      <dd>
+<span class="refAuthor">Postel, J.</span>, <span class="refTitle">"User Datagram Protocol"</span>, <span class="seriesInfo">STD 6</span>, <span class="seriesInfo">RFC 768</span>, <span class="seriesInfo">DOI 10.17487/RFC0768</span>, <time datetime="1980-08" class="refDate">August 1980</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc768">https://www.rfc-editor.org/rfc/rfc768</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 </dl>
+</section>
+</div>
+<div id="sec-informative-references">
+<section id="section-7.2">
+        <h3 id="name-informative-references">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="OFFLOADS">[OFFLOADS]</dt>
+      <dd>
+<span class="refAuthor">The Linux Kernel Documentation</span>, <span class="refTitle">"Segmentation Offloads"</span>, <span>n.d.</span>, <span>&lt;<a href="https://www.kernel.org/doc/html/latest/networking/segmentation-offloads.html">https://www.kernel.org/doc/html/latest/networking/segmentation-offloads.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
 </section>
 </div>
 <div id="acknowledgments">
