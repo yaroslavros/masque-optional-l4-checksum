@@ -19,35 +19,35 @@
 # Change the file extension to match the format (.xml for XML, etc...)
 #
 ###
-title: "TODO - Your title"
+title: "Optional TCP and UDP checksums for IP in HTTP"
 abbrev: "TODO - Abbreviation"
-category: info
+category: std
 
-docname: draft-todo-yourname-protocol-latest
-submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
+docname: draft-rosomakho-masque-optional-l4-checksum-latest
+submissiontype: IETF
 number:
 date:
 consensus: true
 v: 3
 area: AREA
-workgroup: WG Working Group
+workgroup: "Multiplexed Application Substrate over QUIC Encryption"
 keyword:
- - next generation
- - unicorn
- - sparkling distributed ledger
+ - checksum
+ - masque
+ - connect-ip
 venue:
-  group: WG
+  group: "Multiplexed Application Substrate over QUIC Encryption"
   type: Working Group
-  mail: WG@example.com
-  arch: https://example.com/WG
-  github: USER/REPO
-  latest: https://example.com/LATEST
+  mail: "masque@ietf.org"
+  arch: "https://mailarchive.ietf.org/arch/browse/masque/"
+  github: "yaroslavros/masque-optional-l4-checksum"
+  latest: "https://yaroslavros.github.io/masque-optional-l4-checksum/draft-rosomakho-masque-optional-l4-checksum.html"
 
 author:
  -
-    fullname: Your Name Here
-    organization: Your Organization Here
-    email: your.email@example.com
+    fullname: Yaroslav Rosomakho
+    organization: Zscaler
+    email: yrosomakho@zscaler.com
 
 normative:
 
